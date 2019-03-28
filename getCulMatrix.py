@@ -24,8 +24,8 @@ def getLocationSetAndUserSet(fileName):
     # print(userSet)
     return locationSet , userSet ;
 
-def getCulMatrix(fileName):
-    locSet , usrSet = getLocationSetAndUserSet(fileName)
+# CulMatrix  is user x locations
+def getCulMatrix(fileName , locSet , usrSet):
     inputFile = open(fileName,"r")
     matrix = np.zeros((len(usrSet),len(locSet)))
     print("size =",len(matrix) , len(matrix[0]))
@@ -67,6 +67,34 @@ def getWuvMatrix(matrix) :
             j+=1
         i+=1
     return res 
-CulMatrix = getCulMatrix("modified")
+
+#similarity matrix is weight matrix  i.e user x user matrix 
+#similarity array is row from similarity matrix that we have taken
+# k is the tweek factor #i.e number of similar users it has to consider 
+# userIndexs
+def predictPlaces( userIndexs , similarityMatrix  , ULmatrix , k ) :
+    predictedPlaces = []
+    for i in userIndexs :
+        userWeightwrtUserindex = similarityMatrix[userIndexs] 
+        # sort(userWeightwrtUserindex)
+        bestK_SimilarUsers = userWeightwrtUserindex[:k] #NEED TO WRITE A FUNCTION TO MAP INDEXS 
+        predictedProb = []
+        for locInd in range(len(similarityMatrix[0])) :
+            num = 0.0000000001
+            den = 0.0000000001 #added only not to make it divisible by zero condition
+            for x in bestK_SimilarUsers :
+                num += userWeightwrtUserindex[x] * CulMatrix[x][locInd]
+                den += userWeightwrtUserindex[x] 
+            predictedProb.append(num/den)
+        predictPlaces.append(predictedProb)
+    return predictPlaces
+
+
+
+
+fileName = "modified"
+locSet , usrSet = getLocationSetAndUserSet(fileName)
+CulMatrix = getCulMatrix("fileName",locSet,usrSet) 
 WuvMatrix = getWuvMatrix(CulMatrix)
+
 print(WuvMatrix)
