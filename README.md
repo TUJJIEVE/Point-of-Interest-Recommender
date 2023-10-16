@@ -1,5 +1,5 @@
 # poiRec
-## POI(point of interst) Recomendations 
+## POI(point of interest) Recomendations 
 POI Recommendations to users based on **this paper**[https://www.ntu.edu.sg/home/axsun/paper/sun_sigir13quan.pdf] 
 
 ## abstract of paper 
